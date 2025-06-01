@@ -23,7 +23,7 @@
       padding: 2rem;
       width: auto;
       text-align: center;
-      transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+      transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out, transform 0.3s ease;
     }
 
     .nav-title {
@@ -48,6 +48,7 @@
       transition: transform 0.3s ease, background-color 0.3s ease;
       position: relative;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
     }
 
     .nav-links a:hover {
@@ -84,20 +85,20 @@
   </style>
 </head>
 <body>
-  <div class="nav-card">
-    <div class="nav-title">Navigation</div>
+  <div class="nav-card" id="navCard">
+    <div class="nav-title" id="navTitle">Navigation</div>
     <div class="nav-links">
-      <a href="#a" data-tooltip="Page A"><img src="logo-a.png" alt="A"></a>
-      <a href="#b" data-tooltip="Page B"><img src="logo-b.png" alt="B"></a>
-      <a href="#c" data-tooltip="Page C"><img src="logo-c.png" alt="C"></a>
-      <a href="#d" data-tooltip="Page D"><img src="logo-d.png" alt="D"></a>
-      <a href="#e" data-tooltip="Page E"><img src="logo-e.png" alt="E"></a>
+      <a data-page="a" data-tooltip="Page A"><img src="logo-a.png" alt="A"></a>
+      <a data-page="b" data-tooltip="Page B"><img src="logo-b.png" alt="B"></a>
+      <a data-page="c" data-tooltip="Page C"><img src="logo-c.png" alt="C"></a>
+      <a data-page="d" data-tooltip="Page D"><img src="logo-d.png" alt="D"></a>
+      <a data-page="e" data-tooltip="Page E"><img src="logo-e.png" alt="E"></a>
     </div>
   </div>
   <script>
     const body = document.body;
-    const card = document.querySelector('.nav-card');
-    const title = document.querySelector('.nav-title');
+    const card = document.getElementById('navCard');
+    const title = document.getElementById('navTitle');
 
     const colours = {
       a: { bg: '#ffe5e1', card: '#ff6f61', text: '#3a0000', shadow: 'rgba(255, 111, 97, 0.5)' },
@@ -108,21 +109,20 @@
     };
 
     document.querySelectorAll('.nav-links a').forEach(link => {
-      const page = link.getAttribute('href').slice(1);
-      link.addEventListener('mouseenter', () => {
+      const page = link.dataset.page;
+
+      const applyTheme = () => {
         const c = colours[page];
         body.style.backgroundColor = c.bg;
         card.style.backgroundColor = c.card;
         title.style.color = c.text;
-        card.style.boxShadow = `0 8px 24px ${c.shadow}`;
-      });
+        card.style.boxShadow = `0 12px 30px ${c.shadow}`;
+        card.style.transform = 'scale(1.05)';
+        setTimeout(() => card.style.transform = 'scale(1)', 300);
+      };
 
-      link.addEventListener('mouseleave', () => {
-        body.style.backgroundColor = '#f4f4f4';
-        card.style.backgroundColor = 'white';
-        title.style.color = '#000';
-        card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-      });
+      link.addEventListener('mouseenter', applyTheme);
+      link.addEventListener('click', applyTheme);
     });
   </script>
 </body>
